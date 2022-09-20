@@ -3,7 +3,9 @@
 sudo wget https://storage.googleapis.com/golang/getgo/installer_linux
 sudo chmod +x ./installer_linux
 sudo ./installer_linux
-sudo source ~/.bash_profile
+sudo export PATH=$PATH:/root/.go/bin
+sudo export GOPATH=/root/go
+sudo export PATH=$PATH:/root/go/bin
 sudo git clone https://github.com/Mirantis/cri-dockerd.git
 sudo cd cri-dockerd
 sudo mkdir bin
