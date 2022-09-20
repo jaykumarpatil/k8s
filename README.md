@@ -16,9 +16,9 @@ $ exec bash
 server@master:~$ sudo cat /etc/hostname 
 master
 ### Add the following entries in /etc/hosts file on each node
-192.168.1.173   k8smaster.domain.com k8smaster
-192.168.1.174   k8sworker1.domain.com k8sworker1
-192.168.1.175   k8sworker2.domain.com k8sworker2
+192.168.56.201   k8smaster.domain.com k8smaster
+192.168.56.202   k8sworker1.domain.com k8sworker1
+192.168.56.203   k8sworker2.domain.com k8sworker2
 
 # Change the server name in /etc/hosts
 server@master:~$ sudo cat /etc/hosts
@@ -66,7 +66,20 @@ curl -o cgroup-driver.sh https://raw.githubusercontent.com/jaykumarpatil/k8s/mai
 server@master:~$ git clone https://github.com/jaykumarpatil/k8s.git
 server@master:~$ cd k8s
 server@master:~$ chmod +x *.sh
-server@master:~/k8s$ ./docker.sh 
-server@master:~/k8s$ sudo systemctl status docker
-server@master:~/k8s$ ./iptables.sh 
+# Install Ip Table Configurations, Forwarding IPv4 and letting iptables see bridged traffic (Only Master)
+server@master:~/k8s$ ./prerequisite.sh 
+server@master:~/k8s$ ./iptables.sh
 
+server@master:~/k8s$ ./docker.sh
+### check docker installations 
+server@master:~/k8s$ sudo systemctl status docker
+
+## check cgroup
+server@master:~$ stat -fc %T /sys/fs/cgroup/
+## For cgroup v2, the output is cgroup2fs.
+## For cgroup v1, the output is tmpfs.
+
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
