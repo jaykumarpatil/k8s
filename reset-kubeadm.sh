@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo kubeadm reset
-sudo rm -rf /etc/kubernetes
-sudo rm -rf /etc/cni/net.d
-sudo rm -rf $HOME/.kube
+kubeadm reset
+rm -rf /etc/kubernetes
+rm -rf /etc/cni/net.d
+rm -rf $HOME/.kube

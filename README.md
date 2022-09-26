@@ -2,18 +2,18 @@
 
 # Set hostname and add entries in the hosts file
 ## Login to to master node and set hostname using hostnamectl command,
-$ sudo hostnamectl set-hostname "k8smaster.domain.com"
+$ hostnamectl set-hostname "k8smaster.domain.com"
 $ exec bash
 ## On the worker nodes, run
 ### 1st worker node
-$ sudo hostnamectl set-hostname "k8sworker1.domain.com"
+$ hostnamectl set-hostname "k8sworker1.domain.com"
 
 ### 2nd worker node   
-$ sudo hostnamectl set-hostname "k8sworker2.domain.com"   
+$ hostnamectl set-hostname "k8sworker2.domain.com"   
 $ exec bash
 
 # Change the server name in /etc/hostname 
-server@master:~$ sudo cat /etc/hostname 
+server@master:~$ cat /etc/hostname 
 master
 ### Add the following entries in /etc/hosts file on each node
 192.168.56.201   k8smaster.domain.com k8smaster
@@ -21,12 +21,12 @@ master
 192.168.56.203   k8sworker2.domain.com k8sworker2
 
 # Change the server name in /etc/hosts
-server@master:~$ sudo cat /etc/hosts
+server@master:~$ cat /etc/hosts
 127.0.0.1 localhost
 127.0.1.1 master
 
 # Configure static ip /etc/netplan/00-installer-config.yaml
-server@master:~$ sudo cat /etc/netplan/00-installer-config.yaml 
+server@master:~$ cat /etc/netplan/00-installer-config.yaml 
 ## This is the network config written by 'subiquity'
 network:
   ethernets:
@@ -37,14 +37,14 @@ network:
       dhcp4: false
   version: 2
 # Apply the network change in netplan
-server@master:~$ sudo netplan apply
+server@master:~$ netplan apply
 
 # Turn off the swap
-server@master:~$ sudo swapoff -a
+server@master:~$ swapoff -a
 
 # Remove swap related disk form the following file
-server@master:~$ sudo cat /etc/fstab
-server@master:~$ sudo rm /swap.img 
+server@master:~$ cat /etc/fstab
+server@master:~$ rm /swap.img 
 
 # Manual prerequisite 
 
@@ -72,7 +72,7 @@ server@master:~/k8s$ ./iptables.sh
 
 server@master:~/k8s$ ./docker.sh
 ### check docker installations 
-server@master:~/k8s$ sudo systemctl status docker
+server@master:~/k8s$ systemctl status docker
 
 ## check cgroup
 server@master:~$ stat -fc %T /sys/fs/cgroup/
@@ -81,5 +81,5 @@ server@master:~$ stat -fc %T /sys/fs/cgroup/
 
 
 mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
+cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+chown $(id -u):$(id -g) $HOME/.kube/config

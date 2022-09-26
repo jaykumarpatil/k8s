@@ -1,2 +1,2 @@
-sudo ip link
-sudo cat /sys/class/dmi/id/product_uuid
+ip link
+cat /sys/class/dmi/id/product_uuid
