@@ -1,39 +1,38 @@
+
+
 #!/bin/bash
 
-## Install wget and curl command line tools.
-### Debian based systems ###
-apt update
-apt install git wget curl
+## Install cri-dockerd from source
 
-## latest binary package of cri-dockerd. But first, let’s get the latest release version:
-VER=$(curl -s https://api.github.com/repos/Mirantis/cri-dockerd/releases/latest|grep tag_name | cut -d '"' -f 4|sed 's/v//g')
-echo $VER
+## Install Golang on your system
+wget https://storage.googleapis.com/golang/getgo/installer_linux
+chmod +x ./installer_linux
+./installer_linux
+source ~/.bash_profile
 
-## We can then download the archive file from Github cri-dockerd releases page.
-### For Intel 64-bit CPU ###
-wget https://github.com/Mirantis/cri-dockerd/releases/download/v${VER}/cri-dockerd-${VER}.amd64.tgz
-tar xvf cri-dockerd-${VER}.amd64.tgz
+## Confirm installation by checking version of Go.
+go version
 
-### For ARM 64-bit CPU ###
-wget https://github.com/Mirantis/cri-dockerd/releases/download/v${VER}/cri-dockerd-${VER}.arm64.tgz
-tar xvf cri-dockerd-${VER}.arm64.tgz
+## Clone the project code from Github repository
 
-## Move cri-dockerd binary package to /usr/local/bin directory
-mv cri-dockerd/cri-dockerd /usr/local/bin/
+git clone https://github.com/Mirantis/cri-dockerd.git
 
-## Validate successful installation by running the commands below:
-cri-dockerd --version
+## Run the commands below to build this code (in a POSIX environment):
+cd cri-dockerd
+mkdir bin
+cd src && go get && go build -o ../bin/cri-dockerd
+cd ..
 
-## Configure systemd units for cri-dockerd:
-wget https://raw.githubusercontent.com/Mirantis/cri-dockerd/master/packaging/systemd/cri-docker.service
-wget https://raw.githubusercontent.com/Mirantis/cri-dockerd/master/packaging/systemd/cri-docker.socket
-mv cri-docker.socket cri-docker.service /etc/systemd/system/
+## Finally install cri-dockerd on a Linux system. This assumes your system uses systemd, and Docker Engine is installed.
+mkdir -p /usr/local/bin
+install -o root -g root -m 0755 bin/cri-dockerd /usr/local/bin/cri-dockerd
+cp -a packaging/systemd/* /etc/systemd/system
+
+## Start and enable the cri-docker service
 sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/system/cri-docker.service
-
-## Start and enable the services
 systemctl daemon-reload
 systemctl enable cri-docker.service
 systemctl enable --now cri-docker.socket
 
-## Confirm the service is now running:
+## Check service status:
 systemctl status cri-docker.socket
