@@ -8,4 +8,3 @@ kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
 cgroupDriver: systemd
 EOF
-kubeadm init --config kubeadm-config.yaml
