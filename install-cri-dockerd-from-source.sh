@@ -20,8 +20,7 @@ git clone https://github.com/Mirantis/cri-dockerd.git
 ## Run the commands below to build this code (in a POSIX environment):
 cd cri-dockerd
 mkdir bin
-cd src && go get && go build -o ../bin/cri-dockerd
-cd ..
+go build -o bin/cri-dockerd
 
 ## Finally install cri-dockerd on a Linux system. This assumes your system uses systemd, and Docker Engine is installed.
 mkdir -p /usr/local/bin
