@@ -13,13 +13,11 @@ echo $VER
 ### For Intel 64-bit CPU ###
 wget https://github.com/Mirantis/cri-dockerd/releases/download/v${VER}/cri-dockerd-${VER}.amd64.tgz
 tar xvf cri-dockerd-${VER}.amd64.tgz
-
-### For ARM 64-bit CPU ###
-wget https://github.com/Mirantis/cri-dockerd/releases/download/v${VER}/cri-dockerd-${VER}.arm64.tgz
-tar xvf cri-dockerd-${VER}.arm64.tgz
+rm -r cri-dockerd-${VER}.amd64.tgz
 
 ## Move cri-dockerd binary package to /usr/local/bin directory
 mv cri-dockerd/cri-dockerd /usr/local/bin/
+rm -r cri-dockerd
 
 ## Validate successful installation by running the commands below:
 cri-dockerd --version
